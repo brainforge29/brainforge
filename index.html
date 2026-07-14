@@ -655,12 +655,25 @@ async function resetPassword(){
   }catch(e){if(err)err.textContent=e.message||'Could not update password.';}
   finally{if(btn){btn.disabled=false;btn.textContent='Update password';}}
 }
+function isPasswordRecoveryUrl(){
+  const raw=(window.location.hash||'')+'&'+(window.location.search||'');
+  return /(?:type|event)=password_recovery/i.test(raw)||/(?:type|event)=recovery/i.test(raw)||/PASSWORD_RECOVERY/i.test(raw);
+}
+function clearPasswordRecoveryUrl(){
+  if(isPasswordRecoveryUrl()&&window.history?.replaceState)window.history.replaceState({},document.title,window.location.pathname+window.location.search.replace(/[?&](type|event)=(password_)?recovery/i,''));
+}
 async function initAuth(){
   if(!supabaseClient){setAuthUi(null);return;}
+  const recovery=isPasswordRecoveryUrl();
   const {data:{session}}=await supabaseClient.auth.getSession();
   setAuthUi(session);
+  if(recovery&&session){showResetForm();clearPasswordRecoveryUrl();return;}
   if(session){await applyProfileRole();await loadQuestionsFromSupabase();}
-  supabaseClient.auth.onAuthStateChange(async(event,session)=>{if(event==='PASSWORD_RECOVERY'){setAuthUi(session);showResetForm();return;}setAuthUi(session);if(session){await applyProfileRole();await loadQuestionsFromSupabase();}});
+  supabaseClient.auth.onAuthStateChange(async(event,session)=>{
+    if(event==='PASSWORD_RECOVERY'||(isPasswordRecoveryUrl()&&session)){setAuthUi(session);showResetForm();clearPasswordRecoveryUrl();return;}
+    setAuthUi(session);
+    if(session){await applyProfileRole();await loadQuestionsFromSupabase();}
+  });
 }
 async function registerWithEmail(){
   const username=document.getElementById('register-username')?.value.trim()||'',email=document.getElementById('register-email')?.value.trim()||'',password=document.getElementById('register-password')?.value||'',terms=document.getElementById('register-terms')?.checked,err=document.getElementById('register-error'),btn=document.getElementById('register-btn');
@@ -673,7 +686,7 @@ async function registerWithEmail(){
   try{
     const existing=await supabaseClient.from('profiles').select('id').ilike('username',username).maybeSingle();
     if(existing.data?.id)throw new Error('Username is already taken.');
-    const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{username}}});
+    const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{username},emailRedirectTo:window.location.href.split('#')[0]}});
     if(error)throw error;
     if(data.user){
       const profile={id:data.user.id,email,username,role:'teacher'};
@@ -3466,6 +3479,8 @@ syncBankTabs();syncCreatorYearLevelOptions(['7']);setupCurriculumHierarchy({curr
 </script>
 </body>
 </html>
+
+
 
 
 
