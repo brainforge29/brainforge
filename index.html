@@ -41,8 +41,8 @@ body{font-size:14px;color:var(--color-text-primary);background:#f0f0f0;display:f
 .nav-item{padding:9px 14px;cursor:pointer;font-size:13px;border-left:2px solid transparent;color:var(--color-text-secondary);transition:all .15s;display:flex;align-items:center;gap:8px}
 .nav-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
 .nav-item.active{border-left-color:#534AB7;background:var(--color-background-primary);color:#534AB7;font-weight:700}
-.nav-item i{font-size:15px;flex-shrink:0}.role-switch{padding:4px 14px 8px}.role-switch select{width:100%;padding:6px 9px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);font-size:12px;font-family:Arial,sans-serif;color:var(--color-text-primary);outline:none}.role-note{font-size:10px;color:var(--color-text-tertiary);margin-top:4px;line-height:1.25}.role-s-teacher .metadata-admin-section,.role-s-teacher .metadata-users-section{display:none!important}
-.sidebar-stat{padding:4px 14px 10px}
+.nav-item i{font-size:15px;flex-shrink:0}.role-switch{padding:4px 14px 8px}.role-switch select{width:100%;padding:6px 9px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);font-size:12px;font-family:Arial,sans-serif;color:var(--color-text-primary);outline:none}.role-note{font-size:10px;color:var(--color-text-tertiary);margin-top:4px;line-height:1.25}.role-s-teacher .metadata-admin-section,.role-s-teacher .metadata-users-section,.role-teacher .metadata-admin-section,.role-teacher .metadata-users-section{display:none!important}.role-teacher [data-addq-bank-tab]:not([data-addq-bank-tab="global"]){display:none!important}.role-teacher #nav-bank,.role-teacher #nav-create{display:none!important}
+.role-s-teacher .bank-summary-section,.role-teacher .bank-summary-section{display:none!important}.sidebar-stat{padding:4px 14px 10px}
 .sidebar-stat-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:3px 0}
 .tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:700}
 .tag-mc{background:#EEEDFE;color:#3C3489}.tag-sa{background:#E1F5EE;color:#085041}.tag-er{background:#FAEEDA;color:#633806}
@@ -102,7 +102,7 @@ body{font-size:14px;color:var(--color-text-primary);background:#f0f0f0;display:f
 .form-group{margin-bottom:13px}
 .form-group label{display:block;font-size:12px;font-weight:700;color:var(--color-text-secondary);margin-bottom:4px}
 .form-group input,.form-group textarea,.form-group select{width:100%;padding:8px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);font-size:13px;font-family:Arial,sans-serif;color:var(--color-text-primary);outline:none}
-.form-group textarea{resize:vertical;min-height:65px}.solution-line-grid{display:grid;grid-template-columns:1fr 112px;gap:14px;align-items:start}.solution-lines-field{margin-bottom:0}.solution-lines-field input{max-width:112px;text-align:center}@media(max-width:700px){.solution-line-grid{grid-template-columns:1fr}}
+.form-group textarea{resize:vertical;min-height:65px}.solution-line-grid{display:grid;grid-template-columns:minmax(0,18.46cm) 112px;gap:14px;align-items:start;max-width:100%}.solution-lines-field{margin-bottom:0}.solution-lines-field input{max-width:112px;text-align:center}@media(max-width:900px){.solution-line-grid{grid-template-columns:1fr}}
 .metadata-grid{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:12px}
 @media (max-width:900px){.metadata-grid{grid-template-columns:repeat(2,minmax(120px,1fr))}}
 .metadata-grid-bottom{grid-template-columns:repeat(3,minmax(120px,1fr))}
@@ -330,18 +330,20 @@ body{font-size:14px;color:var(--color-text-primary);background:#f0f0f0;display:f
 <div class="app" id="app" style="display:none">
   <div class="sidebar">
     <div class="sidebar-header"><img class="app-logo" src="app-logo.png" alt="Brain Forge logo"><h2 class="sidebar-title">BRAIN FORGE</h2><button type="button" class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen"><i class="ti ti-maximize"></i></button></div>
-    <div class="nav-section" id="role-section">ROLE</div><div class="role-switch" id="role-switch"><select id="app-role" onchange="setAppRole(this.value)"><option value="admin">Admin</option><option value="s_teacher">S.Teacher</option><option value="s_student">S.Student</option><option value="teacher">Teacher</option><option value="student">Student</option></select><div class="role-note" id="role-note">Full access</div></div><div class="nav-section">TOOLS</div>
+    <div class="nav-section">TOOLS</div>
     <div class="nav-item active" onclick="showView('bank')" id="nav-bank"><i class="ti ti-database"></i>Question Bank</div>
     <div class="nav-item" onclick="showView('create')" id="nav-create"><i class="ti ti-writing"></i>Create Question</div>
     <div class="nav-item" onclick="showView('builder')" id="nav-builder"><i class="ti ti-clipboard-list"></i>Exam Builder</div>
     <div class="nav-item" onclick="showView('papers')" id="nav-papers"><i class="ti ti-files"></i>My Papers</div>
     <div class="nav-item" onclick="showView('admin-users')" id="nav-admin-users"><i class="ti ti-users"></i>Admin Users</div>
-    <div class="nav-section" style="margin-top:6px">BANK SUMMARY</div>
-    <div class="sidebar-stat">
-      <div class="sidebar-stat-row"><span>Brain Forge Bank</span><span id="stat-bank-brainforge">0</span></div>
-      <div class="sidebar-stat-row"><span>Global Bank</span><span id="stat-bank-global">0</span></div>
-      <div class="sidebar-stat-row"><span>VCAA Bank</span><span id="stat-bank-vcaa">0</span></div>
-      <div class="sidebar-stat-row"><span>Private Bank</span><span id="stat-bank-private">0</span></div>
+    <div class="bank-summary-section">
+      <div class="nav-section" style="margin-top:6px">BANK SUMMARY</div>
+      <div class="sidebar-stat">
+        <div class="sidebar-stat-row"><span>Brain Forge Bank</span><span id="stat-bank-brainforge">0</span></div>
+        <div class="sidebar-stat-row"><span>Global Bank</span><span id="stat-bank-global">0</span></div>
+        <div class="sidebar-stat-row"><span>VCAA Bank</span><span id="stat-bank-vcaa">0</span></div>
+        <div class="sidebar-stat-row"><span>Private Bank</span><span id="stat-bank-private">0</span></div>
+      </div>
     </div>
     <div class="user-strip" id="user-strip" style="display:none"><div class="user-email" id="user-email"></div><button type="button" class="logout-btn" onclick="logoutUser()"><i class="ti ti-logout"></i>Logout</button></div>
   </div>
@@ -565,11 +567,11 @@ const supabaseClient = window.supabase.createClient(
 let currentUser=null,currentProfileRole=null,adminUsers=[];
 function profileRoleToAppRole(role){
   const key=String(role||'').trim().toLowerCase().replace(/[\s.-]+/g,'_');
-  const map={s_teacher:'s_teacher',moderator:'s_teacher',s_student:'s_student',sstudent:'s_student',teacher:'teacher',student:'student',admin:'admin'};
+  const map={s_teacher:'s_teacher',moderator:'s_teacher',s_student:'s_student',sstudent:'s_student',teacher:'teacher',student:'student',admin:'admin',banned:'banned'};
   return map[key]||'teacher';
 }
 function appRoleLabel(role){
-  return {admin:'Admin',s_teacher:'S.Teacher',s_student:'S.Student',teacher:'Teacher',student:'Student'}[role]||'Teacher';
+  return {admin:'Admin',s_teacher:'S.Teacher',s_student:'S.Student',teacher:'Teacher',student:'Student',banned:'Banned'}[role]||'Teacher';
 }
 function updateSignedInLabel(){
   const email=document.getElementById('user-email');
@@ -590,7 +592,7 @@ async function applyProfileRole(){
     data=byEmail.data;error=byEmail.error;
   }
   if(error){console.warn('Could not load user role:',error);showToast('Could not load user role',true);setAppRole('teacher',false);}
-  else{currentProfileRole=data?.role||'teacher';setAppRole(profileRoleToAppRole(currentProfileRole),false);}
+  else{currentProfileRole=data?.role||'teacher';if(profileRoleToAppRole(currentProfileRole)==='banned'){showToast('This account has been banned',true);await supabaseClient.auth.signOut();setAuthUi(null);const err=document.getElementById('login-error');if(err)err.textContent='This account has been banned.';return;}setAppRole(profileRoleToAppRole(currentProfileRole),false);}
   updateSignedInLabel();
   setRoleTabVisibility(true);
 }
@@ -922,13 +924,24 @@ function updateMainArea(){setupCurriculumHierarchy({mainArea:document.getElement
 function updateCurriculumHierarchy(){const mainArea=document.getElementById('f-main-area')?.value||'Mathematics',curriculum=document.getElementById('f-curriculum')?.value||CURRICULUM_NAME,year=document.getElementById('f-year-from')?.value||'',strand=document.getElementById('f-strand')?.value||'',subtopic=document.getElementById('f-subtopic')?.value||'',difficulty=document.getElementById('f-difficulty')?.value||'Medium';setupCurriculumHierarchy({mainArea,curriculum,yearFrom:year,strand,subtopic,difficulty});syncYearLevel();}function updateStats(){const bf=document.getElementById('stat-bank-brainforge'),global=document.getElementById('stat-bank-global'),vcaa=document.getElementById('stat-bank-vcaa'),priv=document.getElementById('stat-bank-private');if(bf)bf.textContent=questions.filter(q=>(q.bank||'private')==='brainforge').length;if(global)global.textContent=questions.filter(q=>(q.bank||'private')==='global').length;if(vcaa)vcaa.textContent=questions.filter(q=>(q.bank||'private')==='vcaa').length;if(priv)priv.textContent=questions.filter(q=>(q.bank||'private')==='private').length;}
 
 function syncBankTabs(){document.querySelectorAll('[data-bank-tab]').forEach(btn=>btn.classList.toggle('active',btn.dataset.bankTab===activeBankFilter));document.querySelectorAll('[data-addq-bank-tab]').forEach(btn=>btn.classList.toggle('active',btn.dataset.addqBankTab===activeAddQBankFilter));}
-function setBankFilter(bank){activeBankFilter=bank;syncBankTabs();saveState();renderBank();}
-function setAddQBankFilter(bank){activeAddQBankFilter=bank;syncBankTabs();saveState();renderAddQList();}function normaliseAppRole(role){const map={moderator:'s_teacher',sstudent:'s_student'};const value=map[String(role||'').toLowerCase()]||String(role||'').toLowerCase();return ['admin','s_teacher','s_student','teacher','student'].includes(value)?value:'admin';}
+function isTeacherRole(){return currentRole==='teacher';}
 function isSTeacherRole(){return currentRole==='s_teacher';}
-function canEditQuestionBankItem(q){const bank=q?.bank||'private';return !isSTeacherRole()||bank==='private';}
-function canDeleteQuestionBankItem(q){return !isSTeacherRole();}
+function isProtectedTeacherRole(){return isSTeacherRole()||isTeacherRole();}
+function enforceTeacherAddQBank(){if(isTeacherRole())activeAddQBankFilter='global';}
+function setBankFilter(bank){activeBankFilter=bank;syncBankTabs();saveState();renderBank();}
+function setAddQBankFilter(bank){if(isTeacherRole()&&bank!=='global'){activeAddQBankFilter='global';showToast('Teacher role can only add questions from Global Bank',true);}else activeAddQBankFilter=bank;syncBankTabs();saveState();renderAddQList();}function normaliseAppRole(role){const map={moderator:'s_teacher',sstudent:'s_student'};const value=map[String(role||'').toLowerCase()]||String(role||'').toLowerCase();return ['admin','s_teacher','s_student','teacher','student'].includes(value)?value:'admin';}
+function canEditQuestionBankItem(q){const bank=q?.bank||'private';if(isTeacherRole())return false;return !isSTeacherRole()||bank==='private';}
+function canDeleteQuestionBankItem(q){return !isProtectedTeacherRole();}
+function teacherMonthlyExportUser(){return String(currentUser?.id||currentUser?.email||'local').replace(/[^a-z0-9_.-]/gi,'_');}
+function teacherMonthlyExportKey(kind){const d=new Date(),month=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;return `brainforge_teacher_export_${kind}_${teacherMonthlyExportUser()}_${month}`;}
+function teacherMonthlyExportCount(kind){return Number(localStorage.getItem(teacherMonthlyExportKey(kind))||0);}
+function canUseTeacherMonthlyExport(kind){if(!isTeacherRole())return true;const count=teacherMonthlyExportCount(kind),label=kind==='answers'?'answer':'normal';if(count>=5){showToast(`Teacher monthly ${label} export limit reached: 5 of 5`,true);return false;}return true;}
+function recordTeacherMonthlyExport(kind){if(!isTeacherRole())return;const key=teacherMonthlyExportKey(kind);localStorage.setItem(key,String(teacherMonthlyExportCount(kind)+1));}
+function prepareQuestionForExam(q){return shuffleQuestionOptions(q);}
+function canUseTeacherQuestionSet(items){if(!isTeacherRole())return true;const blocked=(items||[]).some(q=>(q.bank||'private')!=='global');if(blocked){showToast('Teacher role can only use Global Bank questions in Exam Builder',true);return false;}return true;}
 function setAppRole(role,rerender=true){
   currentRole=normaliseAppRole(role);
+  enforceTeacherAddQBank();
   const app=document.getElementById('app'),sel=document.getElementById('app-role'),note=document.getElementById('role-note');
   if(app){
     app.classList.toggle('role-s-teacher',currentRole==='s_teacher');
@@ -936,10 +949,10 @@ function setAppRole(role,rerender=true){
     app.classList.toggle('role-student',currentRole==='student'||currentRole==='s_student');
   }
   if(sel)sel.value=currentRole;
-  const notes={admin:'Full access',s_teacher:'S.Teacher: protected banks are read-only',s_student:'S.Student workspace',teacher:'Teacher workspace',student:'Student workspace'};
-  if(note)note.textContent=notes[currentRole]||notes.admin;updateSignedInLabel();const adminNav=document.getElementById('nav-admin-users');if(adminNav)adminNav.style.display=currentRole==='admin'?'flex':'none';
-  if(isSTeacherRole()&&editingId){const q=questions.find(x=>x.id===editingId);if(q&&!canEditQuestionBankItem(q)){editingId=null;showView('bank');}}
-  if(rerender){renderBank();renderExam();renderPapers();saveState();}
+  const notes={admin:'Full access',s_teacher:'S.Teacher: protected banks are read-only',s_student:'S.Student workspace',teacher:'Teacher: Exam Builder only, Global Bank questions, 5 exports/month',student:'Student workspace'};
+  if(note)note.textContent=notes[currentRole]||notes.admin;updateSignedInLabel();const adminNav=document.getElementById('nav-admin-users');if(adminNav)adminNav.style.display=currentRole==='admin'?'flex':'none';if(currentRole==='teacher'){const bankView=document.getElementById('view-bank');if(bankView&&bankView.style.display!=='none')setTimeout(()=>showView('builder'),0);}
+  if(isProtectedTeacherRole()&&editingId){const q=questions.find(x=>x.id===editingId);if(q&&!canEditQuestionBankItem(q)){editingId=null;showView('bank');}}
+  if(rerender){renderBank();renderExam();renderPapers();renderAddQList();saveState();}
 }function bankQuestionActions(q,key){
 const editLocked=!canEditQuestionBankItem(q),deleteLocked=!canDeleteQuestionBankItem(q),editBtn=editLocked?'':`<button class="icon-btn" onclick="editQuestion(${q.id})" title="Edit"><i class="ti ti-edit"></i></button>`,deleteBtn=deleteLocked?'':`<button class="icon-btn" onclick="deleteQuestion(${q.id})" title="Delete"><i class="ti ti-trash"></i></button>`,editDelete=editBtn+deleteBtn;
   const note=editLocked?`<span title="S.Teacher read-only for Brain Forge, VCAA, and Global banks" style="font-size:11px;color:var(--color-text-tertiary);padding:4px 5px">Read-only</span>`:(deleteLocked?`<span title="S.Teacher cannot delete questions" style="font-size:11px;color:var(--color-text-tertiary);padding:4px 5px">No delete</span>`:'');
@@ -1317,6 +1330,7 @@ async function deleteQuestionFromSupabase(question){
   if(error)throw error;
   return true;
 }async function saveQuestion(){
+  if(isTeacherRole()){showToast('Teacher role cannot create or edit questions',true);return;}
   const type=document.getElementById('f-type')?.value||'mc',meta=metadataState();
   let q={id:editingId||nextId++,type,text:getQuestionText(),textHtml:getQuestionHtml(),solution:getSolutionText(),solutionHtml:getSolutionHtml(),lines:parseInt(document.getElementById('f-lines')?.value,10)||1,...meta};
   if(type==='mc'){
@@ -1451,13 +1465,13 @@ function resetForm(){
 }
 function cancelEdit(){editingId=null;window.__editingQuestion=null;showView('bank');}
 async function deleteQuestion(id){const q=questions.find(x=>x.id===id);if(!q)return;if(!canDeleteQuestionBankItem(q)){showToast('S.Teacher cannot delete questions',true);return;}let onlineDeleted=true;try{await deleteQuestionFromSupabase(q);}catch(e){onlineDeleted=false;console.error('Could not delete question from Supabase:',e);}questions=questions.filter(q=>q.id!==id);examQuestions=examQuestions.filter(q=>q.id!==id);saveState();renderBank();showToast(onlineDeleted?'Question deleted':'Question deleted locally - Supabase delete failed',!onlineDeleted);}
-function addToExamDirect(id){const q=questions.find(x=>x.id===id);if(q&&!examQuestions.find(x=>x.id===id)){examQuestions.push(shuffleQuestionOptions(q));saveState();renderExam();showToast(q.type==='mc'?'Added to exam with shuffled options':'Added to exam');}}
+function addToExamDirect(id){const q=questions.find(x=>x.id===id);if(!q||examQuestions.find(x=>x.id===id))return;if(isTeacherRole()&&(q.bank||'private')!=='global'){showToast('Teacher role can only add questions from Global Bank',true);return;}examQuestions.push(prepareQuestionForExam(q));saveState();renderExam();showToast('Added to exam with shuffled options');}
 function showView(v){
   ['bank','create','builder','addq','papers','admin-users'].forEach(x=>{const el=document.getElementById('view-'+x);if(el)el.style.display='none';});
-  if(v==='admin-users'&&currentRole!=='admin'){showToast('Admin access only',true);v='bank';}const a=document.getElementById('view-'+v);if(a)a.style.display='flex';
+  if(v==='admin-users'&&currentRole!=='admin'){showToast('Admin access only',true);v=isTeacherRole()?'builder':'bank';}if(isTeacherRole()&&(v==='bank'||v==='create')){showToast(v==='create'?'Teacher role cannot create or edit questions':'Teacher role cannot access Question Bank',true);v='builder';}const a=document.getElementById('view-'+v);if(a)a.style.display='flex';
   ['bank','create','builder','papers','admin-users'].forEach(x=>{const n=document.getElementById('nav-'+x);if(n)n.classList.toggle('active',x===v);});
   if(v==='builder')renderExam();if(v==='papers')renderPapers();if(v==='admin-users')loadAdminUsers();
-  if(v==='addq'){renderAddQList();document.getElementById('nav-builder').classList.add('active');}
+  if(v==='addq'){enforceTeacherAddQBank();renderAddQList();document.getElementById('nav-builder').classList.add('active');}
   if(v==='create'&&!editingId)resetForm();
   if(v==='create')setTimeout(renderSimilarityChecker,0);
   if(a)setTimeout(()=>renderAllTextBoxKatex(a),0);
@@ -1558,6 +1572,7 @@ function syncAddQMetadataFilters(bankQuestions){
   };
 }
 function renderAddQList(){
+  enforceTeacherAddQBank();
   const search=(document.getElementById('addq-search')||{value:''}).value.toLowerCase();
   const tf=document.getElementById('addq-type-filter')?.value||'';
   const bankQuestions=questions.filter(q=>(q.bank||'private')===activeAddQBankFilter);
@@ -1624,20 +1639,20 @@ function confirmAddToExam(){
     if(cb.checked){
       const id=parseInt(cb.id.replace('qa-',''));
       const q=questions.find(x=>x.id===id);
-      if(q&&!examQuestions.find(x=>x.id===id))examQuestions.push(shuffleQuestionOptions(q));
+      if(q&&!examQuestions.find(x=>x.id===id)){if(isTeacherRole()&&(q.bank||'private')!=='global')return;examQuestions.push(prepareQuestionForExam(q));}
     }
   });
   saveState();
   showView('builder');
 }
-function adminRoleOptions(selected){return ['admin','s_teacher','s_student','teacher','student'].map(role=>`<option value="${role}"${role===selected?' selected':''}>${appRoleLabel(role)}</option>`).join('');}
+function adminRoleOptions(selected){return ['admin','s_teacher','s_student','teacher','student','banned'].map(role=>`<option value="${role}"${role===selected?' selected':''}>${appRoleLabel(role)}</option>`).join('');}
 async function loadAdminUsers(){
   const list=document.getElementById('admin-users-list');
   if(!list)return;
   if(currentRole!=='admin'){list.innerHTML=`<div class="empty-state"><i class="ti ti-lock"></i><div>Admin access only</div></div>`;return;}
   list.innerHTML=`<div class="empty-state"><i class="ti ti-loader"></i><div>Loading users...</div></div>`;
   try{
-    const {data,error}=await supabaseClient.from('profiles').select('id,email,role').order('email',{ascending:true});
+    const {data,error}=await supabaseClient.from('profiles').select('id,email,username,role').order('email',{ascending:true});
     if(error)throw error;
     adminUsers=data||[];
     renderAdminUsers();
@@ -1647,7 +1662,7 @@ function renderAdminUsers(){
   const list=document.getElementById('admin-users-list');
   if(!list)return;
   if(!adminUsers.length){list.innerHTML=`<div class="empty-state"><i class="ti ti-users"></i><div>No profiles found</div></div>`;return;}
-  list.innerHTML=adminUsers.map(u=>`<div class="paper-card"><div class="paper-icon"><i class="ti ti-user"></i></div><div class="paper-info"><div class="paper-title">${esc(u.email||'No email')}</div><div class="paper-meta">${esc(u.id||'')}</div></div><div class="paper-actions"><select onchange="updateUserRole('${esc(u.id)}',this.value)" style="height:32px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:0 8px;background:#fff;font-size:12px;font-family:Arial,sans-serif">${adminRoleOptions(u.role||'teacher')}</select></div></div>`).join('');
+  list.innerHTML=adminUsers.map(u=>`<div class="paper-card"><div class="paper-icon"><i class="ti ti-user"></i></div><div class="paper-info"><div class="paper-title">${esc(u.email||'No email')}</div><div class="paper-meta">${u.username?esc(u.username)+' - ':''}${esc(u.id||'')}</div></div><div class="paper-actions"><select onchange="updateUserRole('${esc(u.id)}',this.value)" style="height:32px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:0 8px;background:#fff;font-size:12px;font-family:Arial,sans-serif">${adminRoleOptions(u.role||'teacher')}</select><button class="btn btn-sm" onclick="banAdminUser('${esc(u.id)}')" style="color:#A32D2D;border-color:#E7B4B4"><i class="ti ti-user-off"></i>Ban</button><button class="icon-btn" onclick="deleteAdminUserProfile('${esc(u.id)}')" title="Delete profile" style="color:#A32D2D"><i class="ti ti-trash"></i></button></div></div>`).join('');
 }
 async function updateUserRole(id,role){
   if(currentRole!=='admin'){showToast('Admin access only',true);return;}
@@ -1658,8 +1673,32 @@ async function updateUserRole(id,role){
     showToast('User role updated');
   }catch(e){console.error('Could not update role:',e);showToast('Could not update user role',true);loadAdminUsers();}
 }
+async function banAdminUser(id){
+  if(currentRole!=='admin'){showToast('Admin access only',true);return;}
+  if(currentUser?.id===id){showToast('You cannot ban your own admin account',true);return;}
+  if(!confirm('Ban this user from Brain Forge?'))return;
+  try{
+    const {error}=await supabaseClient.from('profiles').update({role:'banned'}).eq('id',id);
+    if(error)throw error;
+    adminUsers=adminUsers.map(u=>u.id===id?{...u,role:'banned'}:u);
+    renderAdminUsers();
+    showToast('User banned');
+  }catch(e){console.error('Could not ban user:',e);showToast('Could not ban user',true);loadAdminUsers();}
+}
+async function deleteAdminUserProfile(id){
+  if(currentRole!=='admin'){showToast('Admin access only',true);return;}
+  if(currentUser?.id===id){showToast('You cannot delete your own admin profile',true);return;}
+  if(!confirm('Delete this user profile from Brain Forge? This does not delete the Supabase Authentication account.'))return;
+  try{
+    const {error}=await supabaseClient.from('profiles').delete().eq('id',id);
+    if(error)throw error;
+    adminUsers=adminUsers.filter(u=>u.id!==id);
+    renderAdminUsers();
+    showToast('User profile deleted');
+  }catch(e){console.error('Could not delete user profile:',e);showToast('Could not delete user profile',true);loadAdminUsers();}
+}
 function renderPapers(){const el=document.getElementById('papers-list');if(!savedPapers.length){el.innerHTML=`<div class="empty-state"><i class="ti ti-files"></i><div>No saved papers yet</div><div style="margin-top:6px;font-size:12px">Build an exam and click Save</div></div>`;return;}el.innerHTML=savedPapers.map(p=>{const count=p.questions.length,total=p.marks||p.questions.reduce((s,q)=>s+(Number(q.marks)||0),0);return`<div class="paper-card"><div class="paper-icon"><i class="ti ti-file-text"></i></div><div class="paper-info"><div class="paper-title">${esc(p.title)}</div><div class="paper-meta">${count} question${count!==1?'s':''} - ${total} mark${total!==1?'s':''} - ${esc(p.savedAt||'')}</div></div><div class="paper-actions"><button class="icon-btn" onclick="loadPaper(${p.id})" title="Load"><i class="ti ti-edit"></i></button><button class="icon-btn" onclick="exportPaper(${p.id})" title="Export .docx"><i class="ti ti-download"></i></button><button class="icon-btn" onclick="exportPaperAnswers(${p.id})" title="Export answers" style="color:#A32D2D"><i class="ti ti-file-check"></i></button><button class="icon-btn" onclick="deletePaper(${p.id})" title="Delete" style="color:#A32D2D"><i class="ti ti-trash"></i></button></div></div>`;}).join('');}
-function savePaper(){if(!examQuestions.length){showToast('No questions to save',true);return;}syncInstrHTML();const title=document.getElementById('exam-title').value.trim()||'Untitled Exam';const existing=savedPapers.findIndex(p=>p.title===title);const paper={id:existing>=0?savedPapers[existing].id:Date.now(),title,examDetails:getExamDetails(),questions:[...examQuestions],coverPage:{...coverPage},instrHTML:{...instrHTML},savedAt:new Date().toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),marks:examQuestions.reduce((s,q)=>s+q.marks,0)};if(existing>=0)savedPapers[existing]=paper;else savedPapers.push(paper);saveState();showToast(existing>=0?'Paper updated!':'Paper saved!');}
+function savePaper(){if(!examQuestions.length){showToast('No questions to save',true);return;}if(!canUseTeacherQuestionSet(examQuestions))return;syncInstrHTML();const title=document.getElementById('exam-title').value.trim()||'Untitled Exam';const existing=savedPapers.findIndex(p=>p.title===title);const paper={id:existing>=0?savedPapers[existing].id:Date.now(),title,examDetails:getExamDetails(),questions:[...examQuestions],coverPage:{...coverPage},instrHTML:{...instrHTML},savedAt:new Date().toLocaleString('en-AU',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),marks:examQuestions.reduce((s,q)=>s+q.marks,0)};if(existing>=0)savedPapers[existing]=paper;else savedPapers.push(paper);saveState();showToast(existing>=0?'Paper updated!':'Paper saved!');}
 function loadPaper(id){const p=savedPapers.find(x=>x.id===id);if(!p)return;examQuestions=[...p.questions].map(normalizeQuestion);if(p.instrHTML)Object.assign(instrHTML,p.instrHTML);if(p.coverPage)coverPage={...coverPage,...p.coverPage};document.getElementById('exam-title').value=p.title;applyExamDetails(p.examDetails||{});saveState();showView('builder');showToast('Paper loaded');}
 function deletePaper(id){savedPapers=savedPapers.filter(p=>p.id!==id);saveState();renderPapers();showToast('Paper deleted');}
 function showToast(msg,err){const existing=document.querySelector('.toast');if(existing)existing.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;t.style.background=err?'#A32D2D':'#534AB7';document.body.appendChild(t);setTimeout(()=>t.remove(),2500);}
@@ -3229,7 +3268,7 @@ async function bfDocxWrittenQuestion(q,ctx,qNumber){
   if(q.source||q.afterTextHtml||q.afterText)body.push(EMPTY(0,0));
   if(q.afterTextHtml||q.afterText)body.push(...await docxRichHtml(docxStoredHtml(q.afterTextHtml,q.afterText),ctx,'Times New Roman',12));
   bfTrimTrailingBlankParagraphs(body);
-  if(q.type==='sa'||q.type==='er')body.push(bfDocxSaerAnswerLineTable(q.lines||1));
+  if(q.type==='sa'||q.type==='er')body.push(DOCX_ANSWER_EXPORT_MODE?await bfDocxSaerSolutionTable(q,ctx):bfDocxSaerAnswerLineTable(q.lines||1));
   bfTrimTrailingBlankParagraphs(body);
   body.push(EMPTY(0,120),EMPTY(0,120));
   return bfDocxQuestionTable(qNumber,body,q);
@@ -3366,11 +3405,43 @@ buildDocxRich=buildDocxRichClean;
 function bfCorrectLetter(q){return ['A','B','C','D'][Math.max(0,Math.min(3,Number(q.correct)||0))]||'';}
 function bfAnswerOptionHtml(q){const i=Math.max(0,Math.min(3,Number(q.correct)||0));if(q.optionTemplate==='table'&&q.optionTable?.rows){const row=q.optionTable.rows[i]||[];return row.map(cell=>cell?.html||esc(cell?.text||'')).filter(Boolean).join(' | ');}return q.optionsHtml&&q.optionsHtml[i]?q.optionsHtml[i]:esc((q.options||[])[i]||'');}
 function bfCompactDocxParagraph(p){return String(p||'').replace(/<w:spacing\b[^>]*\/>/g,`<w:spacing w:before="0" w:after="0" w:line="${LINE}" w:lineRule="auto"/>`).replace(/<w:jc w:val="[^"]+"\/>/g,'<w:jc w:val="left"/>');}
+function bfSplitSingleSolutionLine(line){
+  const text=plainTextFromHtml(line).replace(/\s+/g,' ').trim();
+  if(!text)return[];
+  if(/<img\b|bf-equation|data-latex/.test(line))return[line];
+  const chunks=text.split(/(?<=[.!?])\s+(?=(?:[A-Z0-9$]|\(?\d))/).map(s=>s.trim()).filter(Boolean);
+  return chunks.length>1?chunks.map(esc):[line];
+}
+function bfSolutionLineHtmls(html){
+  const raw=String(html||'').trim();
+  if(!raw)return[];
+  const hasHtml=/<[a-z][\s\S]*>/i.test(raw);
+  const lineToken='[[BF_SOLUTION_LINE]]';
+  const normalised=hasHtml
+    ? raw.replace(/<br\s*\/?\s*>/gi,lineToken).replace(/<\/(p|div|li|h[1-6])>/gi,`</$1>${lineToken}`)
+    : esc(raw).replace(/\r?\n/g,lineToken);
+  const lines=normalised.split(lineToken).map(line=>line.trim()).filter(line=>line&&(plainTextFromHtml(line)||/<img\b|bf-equation/.test(line)));
+  return lines.length===1?bfSplitSingleSolutionLine(lines[0]):lines;
+}
+function bfSaerSolutionColourSteps(lines){
+  const colours=['C62828','1565C0','2E7D32'];
+  let colourIndex=Math.floor(Math.random()*colours.length);
+  const markPattern=/\(\s*\d+\s*marks?\s*\)\.?/i;
+  return lines.map(line=>{
+    const colour=colours[colourIndex];
+    if(markPattern.test(plainTextFromHtml(line)))colourIndex=(colourIndex+1)%colours.length;
+    return{html:'<span style="color:#' + colour + '">' + line + '</span>',colour};
+  });
+}
 async function bfDocxSaerSolutionTable(q,ctx){
   const html=q.solutionHtml||esc(q.solution||''),oldColor=ctx.equationColor;
-  ctx.equationColor='C62828';
   let paras=[];
-  if(plainTextFromHtml(html)||/<img\b|bf-equation/.test(html))paras=await docxRichHtml(html,ctx,'Times New Roman',12);
+  const solutionLines=bfSaerSolutionColourSteps(bfSolutionLineHtmls(html));
+  for(const line of solutionLines){
+    ctx.equationColor=line.colour;
+    const lineParas=await docxRichHtml(line.html,ctx,'Times New Roman',12);
+    paras.push(...lineParas);
+  }
   ctx.equationColor=oldColor;
   paras=paras.map(bfCompactDocxParagraph).filter(p=>p&&(!/^<w:p>[\s\S]*?<w:t>\s*<\/w:t>[\s\S]*?<\/w:p>$/.test(p)||p.includes('<w:drawing')));
   if(!paras.length)paras=[`<w:p><w:pPr><w:jc w:val="left"/>${SP(0,0,LINE)}</w:pPr>${RUN('No solution added.','Times New Roman',false,true,false,24,'888888')}</w:p>`];
@@ -3444,9 +3515,10 @@ async function bfColorAnswerLettersInDocx(blob,qs){
   zip.file(path,new XMLSerializer().serializeToString(doc));
   return zip.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
 }
-async function exportExam(){if(!examQuestions.length){showToast('No questions in exam',true);return;}if(typeof JSZip==='undefined'){showToast('ZIP library not ready',true);return;}syncInstrHTML();syncCoverPage();const btn=document.getElementById('export-btn');btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Building...';try{const title=document.getElementById('exam-title').value||'Exam';const blob=await buildDocxRich(title,examQuestions,instrHTML,{...getExamDetails(),coverPage:{...coverPage}});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=title.replace(/\s+/g,'_')+'.docx';a.click();showToast('Exported as .docx!');}catch(e){showToast('Export failed: '+e.message,true);console.error(e);}finally{btn.disabled=false;btn.innerHTML='<i class="ti ti-download"></i>Export .docx';}}
-async function exportAnswers(){if(!examQuestions.length){showToast('No questions in exam',true);return;}if(typeof JSZip==='undefined'){showToast('ZIP library not ready',true);return;}syncInstrHTML();syncCoverPage();const btn=document.getElementById('export-answers-btn');btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Building...';try{const title=document.getElementById('exam-title').value||'Exam',answerQuestions=bfPrepareAnswerExportQuestions(examQuestions);DOCX_ANSWER_EXPORT_MODE=true;const rawBlob=await buildDocxRich(title,answerQuestions,instrHTML,{...getExamDetails(),coverPage:{...coverPage}});DOCX_ANSWER_EXPORT_MODE=false;const blob=await bfColorAnswerLettersInDocx(rawBlob,answerQuestions);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=title.replace(/\s+/g,'_')+'_Answers.docx';a.click();showToast('Exported answer copy as .docx!');}catch(e){DOCX_ANSWER_EXPORT_MODE=false;showToast('Answer export failed: '+e.message,true);console.error(e);}finally{btn.disabled=false;btn.innerHTML='<i class="ti ti-file-check"></i>Export Answers';}}
-async function exportPaper(id){if(typeof JSZip==='undefined'){showToast('ZIP library not ready',true);return;}const p=savedPapers.find(x=>x.id===id);if(!p)return;try{const iHtml=p.instrHTML||instrHTML;const blob=await buildDocxRich(p.title,p.questions,iHtml,{...(p.examDetails||{}),coverPage:p.coverPage||coverDefaultsForDetails(p.examDetails||{})});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.title.replace(/\s+/g,'_')+'.docx';a.click();showToast('Exported '+p.title);}catch(e){showToast('Export failed: '+e.message,true);}}async function exportPaperAnswers(id){if(typeof JSZip==='undefined'){showToast('ZIP library not ready',true);return;}const p=savedPapers.find(x=>x.id===id);if(!p)return;try{const iHtml=p.instrHTML||instrHTML,answerQuestions=bfPrepareAnswerExportQuestions(p.questions||[]);DOCX_ANSWER_EXPORT_MODE=true;const rawBlob=await buildDocxRich(p.title,answerQuestions,iHtml,{...(p.examDetails||{}),coverPage:p.coverPage||coverDefaultsForDetails(p.examDetails||{})});DOCX_ANSWER_EXPORT_MODE=false;const blob=await bfColorAnswerLettersInDocx(rawBlob,answerQuestions);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.title.replace(/\s+/g,'_')+'_Answers.docx';a.click();showToast('Exported answer copy for '+p.title);}catch(e){DOCX_ANSWER_EXPORT_MODE=false;showToast('Answer export failed: '+e.message,true);console.error(e);}}
+async function exportExam(){if(!canUseTeacherQuestionSet(examQuestions))return;if(!canUseTeacherMonthlyExport('normal'))return;if(!examQuestions.length){showToast('No questions in exam',true);return;}if(typeof JSZip==='undefined'){showToast('ZIP library not ready',true);return;}syncInstrHTML();syncCoverPage();const btn=document.getElementById('export-btn');btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Building...';try{const title=document.getElementById('exam-title').value||'Exam';const blob=await buildDocxRich(title,examQuestions,instrHTML,{...getExamDetails(),coverPage:{...coverPage}});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=title.replace(/\s+/g,'_')+'.docx';a.click();recordTeacherMonthlyExport('normal');showToast('Exported as .docx!');}catch(e){showToast('Export failed: '+e.message,true);console.error(e);}finally{btn.disabled=false;btn.innerHTML='<i class="ti ti-download"></i>Export .docx';}}
+async function exportAnswers(){if(!canUseTeacherQuestionSet(examQuestions))return;if(!canUseTeacherMonthlyExport('answers'))return;if(!examQuestions.length){showToast('No questions in exam',true);return;}if(typeof JSZip==='undefined'){showToast('ZIP library not ready',true);return;}syncInstrHTML();syncCoverPage();const btn=document.getElementById('export-answers-btn');btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Building...';try{const title=document.getElementById('exam-title').value||'Exam',answerQuestions=bfPrepareAnswerExportQuestions(examQuestions);DOCX_ANSWER_EXPORT_MODE=true;const rawBlob=await buildDocxRich(title,answerQuestions,instrHTML,{...getExamDetails(),coverPage:{...coverPage}});DOCX_ANSWER_EXPORT_MODE=false;const blob=await bfColorAnswerLettersInDocx(rawBlob,answerQuestions);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=title.replace(/\s+/g,'_')+'_Answers.docx';a.click();recordTeacherMonthlyExport('answers');showToast('Exported answer copy as .docx!');}catch(e){DOCX_ANSWER_EXPORT_MODE=false;showToast('Answer export failed: '+e.message,true);console.error(e);}finally{btn.disabled=false;btn.innerHTML='<i class="ti ti-file-check"></i>Export Answers';}}
+async function exportPaper(id){if(!canUseTeacherMonthlyExport('normal'))return;if(typeof JSZip==='undefined'){showToast('ZIP library not ready',true);return;}const p=savedPapers.find(x=>x.id===id);if(!p)return;if(!canUseTeacherQuestionSet(p.questions||[]))return;try{const iHtml=p.instrHTML||instrHTML;const blob=await buildDocxRich(p.title,p.questions,iHtml,{...(p.examDetails||{}),coverPage:p.coverPage||coverDefaultsForDetails(p.examDetails||{})});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.title.replace(/\s+/g,'_')+'.docx';a.click();recordTeacherMonthlyExport('normal');showToast('Exported '+p.title);}catch(e){showToast('Export failed: '+e.message,true);}}
+async function exportPaperAnswers(id){if(!canUseTeacherMonthlyExport('answers'))return;if(typeof JSZip==='undefined'){showToast('ZIP library not ready',true);return;}const p=savedPapers.find(x=>x.id===id);if(!p)return;if(!canUseTeacherQuestionSet(p.questions||[]))return;try{const iHtml=p.instrHTML||instrHTML,answerQuestions=bfPrepareAnswerExportQuestions(p.questions||[]);DOCX_ANSWER_EXPORT_MODE=true;const rawBlob=await buildDocxRich(p.title,answerQuestions,iHtml,{...(p.examDetails||{}),coverPage:p.coverPage||coverDefaultsForDetails(p.examDetails||{})});DOCX_ANSWER_EXPORT_MODE=false;const blob=await bfColorAnswerLettersInDocx(rawBlob,answerQuestions);const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=p.title.replace(/\s+/g,'_')+'_Answers.docx';a.click();recordTeacherMonthlyExport('answers');showToast('Exported answer copy for '+p.title);}catch(e){DOCX_ANSWER_EXPORT_MODE=false;showToast('Answer export failed: '+e.message,true);console.error(e);}}
 async function toggleFullscreen(){const app=document.getElementById('app');try{if(!document.fullscreenElement){if(app.requestFullscreen)await app.requestFullscreen();else app.classList.add('is-fullscreen');}else await document.exitFullscreen();}catch(e){app.classList.toggle('is-fullscreen');}updateFullscreenButton();refreshQuestionToolbarPin();}
 function updateFullscreenButton(){const app=document.getElementById('app'),btn=document.getElementById('fullscreen-btn');if(!btn)return;const full=!!document.fullscreenElement||app.classList.contains('is-fullscreen');btn.innerHTML=`<i class="ti ti-${full?'minimize':'maximize'}"></i>`;btn.title=full?'Exit fullscreen':'Fullscreen';}
 
@@ -3479,6 +3551,20 @@ syncBankTabs();syncCreatorYearLevelOptions(['7']);setupCurriculumHierarchy({curr
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
